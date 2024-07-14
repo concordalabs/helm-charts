@@ -11,4 +11,14 @@ entries:
     urls:
     - https://github.com/concordalabs/helm-charts/releases/download/generic-app-1.0.2/generic-app-1.0.2.tgz
     version: 1.0.2
-generated: "2024-07-14T01:19:48.842345108Z"
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2024-07-14T01:39:51.964876129Z"
+    description: Applications
+    digest: 89c8f456d4125582c8a5d1d3dbc8f39832e4ac204071b3e3264c62b3298298a4
+    name: generic-app
+    type: application
+    urls:
+    - https://github.com/concordalabs/helm-charts/releases/download/generic-app-1.0.0/generic-app-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-07-14T01:39:51.964883673Z"
