@@ -36,7 +36,12 @@ spec:
         resources:
           {{- toYaml .Values.deployment.resources | nindent 10}}
         env:
-          {{- toYaml .Values.deployment.env | nindent 10}}
+        {{- if or .Values.deployment.env }}
+          {{- range $k, $v := .Values.deployment.env}}
+          - name: {{$k}}
+            value: {{$v | quote}}
+          {{- end}}
+        {{- end }}
         # TODO: enforce these, since the deployment is managed through here
         readinessProbe:
           {{- toYaml .Values.deployment.readinessProbe | nindent 10}}
