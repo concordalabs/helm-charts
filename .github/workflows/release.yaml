@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io/concordalabs/helm-charts
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: azure/setup-helm@v4
+
+      - name: Get changed helm files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            charts/*/Chart.yaml
+
+      - name: login to acr using helm
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ${{ env.REGISTRY }} --username ${{ github.repository_owner }} --password-stdin
+
+      - name: Release
+        run: |
+          set -euox pipefail
+          changed=${{ steps.changed-files.outputs.all_modified_files }}
+
+          for chartPath in ${changed[@]}; do
+            chartVersion=$(yq '.version' < ${chartPath})
+            chartName=$(yq '.name' < ${chartPath})
+            chartDir=$(dirname ${chartPath})
+
+            helm package ${chartDir}
+            helm push "${chartName}"-"${chartVersion}".tgz oci://"${REGISTRY}"
+          done
