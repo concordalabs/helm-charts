@@ -20,7 +20,7 @@ jobs:
 
     permissions:
       id-token: write
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -29,29 +29,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
       - uses: azure/setup-helm@v4
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Get changed helm files
-        id: changed-files
-        uses: tj-actions/changed-files@v44
-        with:
-          files: |
-            charts/*/Chart.yaml
-
-      - name: login to acr using helm
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ${{ env.REGISTRY }} --username ${{ github.repository_owner }} --password-stdin
-
-      - name: Release
-        run: |
-          set -euox pipefail
-          changed=${{ steps.changed-files.outputs.all_modified_files }}
-
-          for chartPath in ${changed[@]}; do
-            chartVersion=$(yq '.version' < ${chartPath})
-            chartName=$(yq '.name' < ${chartPath})
-            chartDir=$(dirname ${chartPath})
-
-            helm package ${chartDir}
-            helm push "${chartName}"-"${chartVersion}".tgz oci://"${REGISTRY}"
-          done
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
