@@ -16,10 +16,18 @@ deployment:
     # The preference is to always use digest, but tag can still be used if required
     digest:
     tag: latest
+  # Optional: specify a custom command for the Docker start
+  command: null
   ports:
     - 8080
+  # By default it will have Memory QoS guaranteed and burstable CPU (low values so requires adjustment from devs)
   resources:
-  env: []
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 128Mi
+  env: {}
   # TODO: enforce default values which users can opt-out, instead of being opt-in
   readinessProbe:
   livenessProbe:

@@ -24,7 +24,8 @@ spec:
       {{- end }}
       # TODO: topologySpreadConstraints
       containers:
-      - name: {{ include "deployment.name" . }}
+      - name: app
+        command: {{ .Values.deployment.command }}
         {{- if .Values.deployment.image.digest }}
         image: {{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}
         {{- else }}
