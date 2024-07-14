@@ -25,7 +25,7 @@ spec:
       # TODO: topologySpreadConstraints
       containers:
       - name: app
-        command: {{ .Values.deployment.command }}
+        command: {{- toYaml .Values.deployment.command | nindent 10 }}
         {{- if .Values.deployment.image.digest }}
         image: {{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}
         {{- else }}
