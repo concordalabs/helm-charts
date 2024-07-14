@@ -3,6 +3,16 @@ entries:
   app:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2024-07-14T10:57:12.901161354Z"
+    description: Applications
+    digest: b5d68bdd8fc9544afd5deb2ff59ab0b4b94c59da942336625607636b9edd81ba
+    name: app
+    type: application
+    urls:
+    - https://github.com/concordalabs/helm-charts/releases/download/app-1.1.2/app-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2024-07-14T10:50:28.512464321Z"
     description: Applications
     digest: 63c4214d8126761e88464be312ec1ce54926590877e1fb019d7801126d94d834
@@ -31,4 +41,4 @@ entries:
     urls:
     - https://github.com/concordalabs/helm-charts/releases/download/app-1.0.0/app-1.0.0.tgz
     version: 1.0.0
-generated: "2024-07-14T10:50:28.512488448Z"
+generated: "2024-07-14T10:57:12.901182954Z"
